@@ -34,6 +34,8 @@ jobs:
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_DOCS_URL: https://docs.dev.searchandmerch.com
+          VITE_ORGANISATION_ID: ${{ secrets.VITE_ORGANISATION_ID }}
+          VITE_FEED_ID : ${{ secrets.VITE_FEED_ID }}
         run: bun run build
 
       - name: Configure AWS credentials (dev)

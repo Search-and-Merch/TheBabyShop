@@ -29,9 +29,9 @@ export default function ProductCard({ product, index = 0 }: Props) {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-      <div className={`${colorClass} h-48 flex items-center justify-center overflow-hidden`}>
+      <div className={`${colorClass} flex items-center justify-center overflow-hidden`}>
         {imageUrl ? (
-          <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
+          <img src={imageUrl} alt={name} className="aspect-square w-full" />
         ) : (
           <span className="text-5xl">🧸</span>
         )}
@@ -41,7 +41,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
         <h3 className="font-semibold text-gray-800 text-sm leading-snug line-clamp-2">{name}</h3>
         <div className="mt-3 flex items-center justify-between">
           {price !== null ? (
-            <span className="text-pink-700 font-bold">£{price.toFixed(2)}</span>
+            <span className="font-bold">£{price.toFixed(2)}</span>
           ) : (
             <span />
           )}

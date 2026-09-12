@@ -2,6 +2,7 @@ export interface ScoredProduct {
   id: string
   sku: string
   score: number
+  price: number
   [key: string]: unknown
 }
 

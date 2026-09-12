@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { fetchProductRecommendations } from '../api/productRecommendations'
 import { ORGANISATION_ID, RECOMMENDATION_ID } from '../constants'
 import type { ScoredProduct } from '../types/ProductRecommendations'
@@ -20,7 +21,7 @@ function RecommendedProductCard({ product, index }: { product: ScoredProduct; in
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden min-w-[180px] max-w-[180px] hover:shadow-md transition-shadow shrink-0">
       <div className={`${colorClass} h-36 flex items-center justify-center overflow-hidden`}>
         {imageUrl ? (
-          <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
+          <img src={imageUrl} alt={name} className="aspect-square w-full" />
         ) : (
           <span className="text-4xl">🧸</span>
         )}
@@ -28,6 +29,9 @@ function RecommendedProductCard({ product, index }: { product: ScoredProduct; in
       <div className="p-3">
         <p className="text-xs text-gray-400 font-mono mb-0.5 truncate">{product.sku}</p>
         <h4 className="text-xs font-semibold text-gray-800 leading-snug line-clamp-2">{name}</h4>
+        {product.price != null && (
+          <p className="text-xs font-semibold text-gray-900 mt-1">£{product.price.toFixed(2)}</p>
+        )}
       </div>
     </div>
   )
@@ -38,6 +42,22 @@ export default function RecommendationWidget() {
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd] = useState(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  const handleScroll = () => {
+    const el = scrollRef.current
+    if (!el) return
+    const nowAtStart = el.scrollLeft === 0
+    const nowAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1
+    if (nowAtStart !== atStart) setAtStart(nowAtStart)
+    if (nowAtEnd !== atEnd) setAtEnd(nowAtEnd)
+  }
+
+  const scrollBy = (amount: number) => {
+    scrollRef.current?.scrollBy({ left: amount, behavior: 'smooth' })
+  }
 
   useEffect(() => {
     if (!ORGANISATION_ID || !RECOMMENDATION_ID) {
@@ -63,7 +83,7 @@ export default function RecommendationWidget() {
   if (loading) {
     return (
       <section className="py-10">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="container mx-auto px-4">
           <div className="h-6 w-40 bg-gray-100 rounded animate-pulse mb-5" />
           <div className="flex gap-4">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -79,12 +99,32 @@ export default function RecommendationWidget() {
 
   return (
     <section className="py-10 border-t border-gray-100">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="container mx-auto px-4">
         <h2 className="text-xl font-bold text-gray-800 mb-5">{title || 'You Might Like'}</h2>
-        <div className="flex gap-4 overflow-x-auto pb-2">
-          {products.map((p, i) => (
-            <RecommendedProductCard key={p.id} product={p} index={i} />
-          ))}
+        <div className="relative">
+          {!atStart && (
+            <button
+              onClick={() => scrollBy(-220)}
+              className="absolute cursor-pointer left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2 text-gray-600 hover:text-gray-900 hover:shadow-lg transition-shadow hover:bg-gray-800 hover:text-white"
+              aria-label="Scroll left"
+            >
+              <ArrowLeftIcon className="w-4.5 h-4.5" />
+            </button>
+          )}
+          <div ref={scrollRef} onScroll={handleScroll} className="flex gap-4 overflow-x-auto pb-2">
+            {products.map((p, i) => (
+              <RecommendedProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+          {!atEnd && (
+            <button
+              onClick={() => scrollBy(220)}
+              className="absolute cursor-pointer right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2 text-gray-600 hover:text-gray-900 hover:shadow-lg transition-shadow hover:bg-gray-800 hover:text-white"
+              aria-label="Scroll right"
+            >
+              <ArrowRightIcon className="w-4.5 h-4.5" />
+            </button>
+          )}
         </div>
       </div>
     </section>

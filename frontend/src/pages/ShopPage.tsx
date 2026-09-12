@@ -94,7 +94,7 @@ export default function ShopPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">All Products</h1>
         {loading ? (
@@ -110,7 +110,7 @@ export default function ShopPage() {
         </div>
       )}
 
-      <div className="flex flex-row gap-8 items-start">
+      <div className="flex max-sm:flex-col gap-8 items-start">
         <FacetSidebar facets={facets} selected={selectedFacets} onChange={handleFacetChange} />
 
         <div className="flex-1 w-full">

@@ -3,3 +3,4 @@ export const DOCS_URL = import.meta.env.VITE_DOCS_URL ?? 'https://docs.searchmer
 export const ORGANISATION_ID = import.meta.env.VITE_ORGANISATION_ID ?? ''
 export const FEED_ID = import.meta.env.VITE_FEED_ID ?? ''
 export const RECOMMENDATION_ID = import.meta.env.VITE_RECOMMENDATION_ID ?? ''
+export const SEARCH_ID = import.meta.env.VITE_SEARCH_ID ?? ''

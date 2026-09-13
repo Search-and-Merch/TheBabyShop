@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import ShopPage from './pages/ShopPage'
+import SearchPage from './pages/SearchPage'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/search" element={<SearchPage />} />
         </Routes>
       </main>
       <Footer />

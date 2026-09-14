@@ -18,7 +18,7 @@ function RecommendedProductCard({ product, index }: { product: ScoredProduct; in
   const imageUrl = getStringField(product, 'image_url', 'image', 'image_link')
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden min-w-[180px] max-w-[180px] hover:shadow-md transition-shadow shrink-0">
+    <div className="bg-white rounded-lg pt-4 border border-gray-300 overflow-hidden min-w-[180px] max-w-[180px] shrink-0">
       <div className={`${colorClass} h-36 flex items-center justify-center overflow-hidden`}>
         {imageUrl ? (
           <img src={imageUrl} alt={name} className="aspect-square w-full" />

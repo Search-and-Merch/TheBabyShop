@@ -28,7 +28,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
   const imageUrl = getStringField(product, 'image_url', 'image', 'image_link')
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-md border border-gray-300 overflow-hidden">
       <div className={`${colorClass} flex items-center justify-center overflow-hidden`}>
         {imageUrl ? (
           <img src={imageUrl} alt={name} className="aspect-square w-full" />

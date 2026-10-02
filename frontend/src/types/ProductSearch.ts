@@ -19,6 +19,7 @@ export interface SearchProduct {
 export interface ProductSearchResult {
   search_id: string
   total_count: number
+  redirect: string | null
   page: number
   limit: number
   total_pages: number

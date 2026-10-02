@@ -16,6 +16,7 @@ export default function SearchBar() {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const lastSearchRef = useRef<{ query: string, redirect: string | null } | null>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function SearchBar() {
           page: 1,
           limit: 5,
         })
+        lastSearchRef.current = { query: query.trim(), redirect: res.redirect }
         setResults(res.products.slice(0, 5))
         setOpen(true)
       } catch {
@@ -55,10 +57,40 @@ export default function SearchBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  async function getRedirect(trimmed: string): Promise<string | null> {
+    if (lastSearchRef.current?.query === trimmed) return lastSearchRef.current.redirect
+    try {
+      const res = await fetchProductSearch({
+        searchId: SEARCH_ID,
+        organisationId: ORGANISATION_ID,
+        query: trimmed,
+        page: 1,
+        limit: 1,
+      })
+      return res.redirect
+    } catch {
+      return null
+    }
+  }
+
+  async function submitSearch(trimmed: string) {
+    setOpen(false)
+    const redirect = await getRedirect(trimmed)
+    if (!redirect) {
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`)
+      return
+    }
+    const url = new URL(redirect, window.location.origin)
+    if (url.origin === window.location.origin) {
+      navigate(url.pathname + url.search + url.hash)
+    } else {
+      window.location.assign(url.href)
+    }
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' && query.trim()) {
-      setOpen(false)
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`)
+      void submitSearch(query.trim())
     }
     if (e.key === 'Escape') {
       setOpen(false)

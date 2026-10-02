@@ -2,6 +2,10 @@ import { Link, NavLink } from 'react-router'
 import SearchBar from './SearchBar'
 
 export default function Header() {
+
+  const activeNavLinkClass = 'text-pink-600 border-b-2 border-pink-600';
+  const inactiveNavLinkClass = 'text-gray-600 border-b-2 border-transparent hover:text-pink-600 transition-colors';
+
   return (
     <header className="bg-pink-50 border-b border-pink-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center gap-8">
@@ -15,21 +19,31 @@ export default function Header() {
             end
             className={({ isActive }) =>
               isActive
-                ? 'text-pink-600 border-b-2 border-pink-600 pb-0.5'
-                : 'text-gray-600 hover:text-pink-600 transition-colors'
+                ? activeNavLinkClass
+                : inactiveNavLinkClass
             }
           >
             Home
           </NavLink>
           <NavLink
-            to="/shop"
+            to="shop"
             className={({ isActive }) =>
               isActive
-                ? 'text-pink-600 border-b-2 border-pink-600 pb-0.5'
-                : 'text-gray-600 hover:text-pink-600 transition-colors'
+                ? activeNavLinkClass
+                : inactiveNavLinkClass
             }
           >
             Shop
+          </NavLink>
+          <NavLink
+            to="/pushchairs"
+            className={({ isActive }) =>
+              isActive
+                ? activeNavLinkClass
+                : inactiveNavLinkClass
+            }
+          >
+            Pushchairs
           </NavLink>
           <SearchBar />
         </nav>

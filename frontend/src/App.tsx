@@ -4,6 +4,7 @@ import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import ShopPage from './pages/ShopPage'
 import SearchPage from './pages/SearchPage'
+import PushchairsPage from './pages/PushchairsPage'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/pushchairs" element={<PushchairsPage />} />
         </Routes>
       </main>
       <Footer />

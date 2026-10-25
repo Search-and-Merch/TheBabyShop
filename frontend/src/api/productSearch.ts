@@ -1,5 +1,5 @@
-import { API_URL } from '../constants'
-import type { ProductSearchRequest, ProductSearchResult } from '../types/ProductSearch'
+import { API_URL } from '@/constants'
+import type { ProductSearchRequest, ProductSearchResult } from '@/types/ProductSearch'
 
 export async function fetchProductSearch(req: ProductSearchRequest): Promise<ProductSearchResult> {
   const res = await fetch(`${API_URL}/product-search`, {

@@ -1,5 +1,5 @@
-import { API_URL } from '../constants'
-import type { FeedProductListResult, ProductListRequest } from '../types/ProductList'
+import { API_URL } from '@/constants'
+import type { FeedProductListResult, ProductListRequest } from '@/types/ProductList'
 
 export async function fetchProductList(req: ProductListRequest): Promise<FeedProductListResult> {
   const res = await fetch(`${API_URL}/product-list`, {

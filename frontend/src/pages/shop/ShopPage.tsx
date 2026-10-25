@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { fetchProductList } from '../api/productList'
-import FacetSidebar from '../components/FacetSidebar'
-import Pagination from '../components/Pagination'
-import ProductCard from '../components/ProductCard'
-import { FEED_ID, ORGANISATION_ID } from '../constants'
-import type { FacetResult, FeedListProduct } from '../types/ProductList'
+import { fetchProductList } from '@/api/productList'
+import FacetSidebar from '@/components/FacetSidebar'
+import Pagination from '@/components/Pagination'
+import ProductCard from '@/components/ProductCard'
+import { FEED_ID, ORGANISATION_ID } from '@/constants'
+import type { FacetResult, FeedListProduct } from '@/types/ProductList'
 
 const PAGE_SIZE = 12
 
@@ -86,6 +86,15 @@ export default function ShopPage() {
     setSearchParams(next)
   }
 
+  function handleClearFacets() {
+    const next = new URLSearchParams(searchParams)
+    for (const key of [...next.keys()]) {
+      if (key.startsWith('f_')) next.delete(key)
+    }
+    next.delete('page')
+    setSearchParams(next)
+  }
+
   function handlePageChange(p: number) {
     const next = new URLSearchParams(searchParams)
     next.set('page', String(p))
@@ -111,7 +120,7 @@ export default function ShopPage() {
       )}
 
       <div className="flex max-sm:flex-col gap-8 items-start">
-        <FacetSidebar facets={facets} selected={selectedFacets} onChange={handleFacetChange} />
+        <FacetSidebar facets={facets} selected={selectedFacets} onChange={handleFacetChange} onClear={handleClearFacets} />
 
         <div className="flex-1 w-full">
           {loading ? (

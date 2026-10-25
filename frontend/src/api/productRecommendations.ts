@@ -1,5 +1,5 @@
-import { API_URL } from '../constants'
-import type { ProductRecommendationResult, ProductRecommendationsRequest } from '../types/ProductRecommendations'
+import { API_URL } from '@/constants'
+import type { ProductRecommendationResult, ProductRecommendationsRequest } from '@/types/ProductRecommendations'
 
 export async function fetchProductRecommendations(
   req: ProductRecommendationsRequest

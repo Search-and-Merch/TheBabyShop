@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
-import { fetchProductRecommendations } from '../api/productRecommendations'
-import { ORGANISATION_ID, RECOMMENDATION_ID } from '../constants'
-import type { ScoredProduct } from '../types/ProductRecommendations'
+import { fetchProductRecommendations } from '@/api/productRecommendations'
+import { ORGANISATION_ID, RECOMMENDATION_ID } from '@/constants'
+import type { ScoredProduct } from '@/types/ProductRecommendations'
 
-const PLACEHOLDER_COLORS = ['bg-pink-100', 'bg-blue-100', 'bg-yellow-100', 'bg-green-100', 'bg-purple-100']
+const PLACEHOLDER_COLORS = ['bg-blue-100', 'bg-blue-100', 'bg-yellow-100', 'bg-green-100', 'bg-purple-100']
 
 function getStringField(product: ScoredProduct, ...keys: string[]): string | undefined {
   for (const key of keys) {

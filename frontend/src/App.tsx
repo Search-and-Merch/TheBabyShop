@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import HomePage from './pages/HomePage'
-import ShopPage from './pages/ShopPage'
-import SearchPage from './pages/SearchPage'
-import PushchairsPage from './pages/PushchairsPage'
+import HomePage from './pages/home/HomePage'
+import ShopPage from './pages/shop/ShopPage'
+import SearchPage from './pages/search/SearchPage'
+import PushchairsPage from './pages/pushchairs/PushchairsPage'
 
 export default function App() {
   return (

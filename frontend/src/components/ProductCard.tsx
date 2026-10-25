@@ -1,7 +1,7 @@
-import type { FeedListProduct } from '../types/ProductList'
+import type { FeedListProduct } from '@/types/ProductList'
 
 const PLACEHOLDER_COLORS = [
-  'bg-pink-100',
+  'bg-blue-100',
   'bg-blue-100',
   'bg-yellow-100',
   'bg-green-100',

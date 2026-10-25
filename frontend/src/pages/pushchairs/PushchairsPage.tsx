@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import { fetchProductList } from '../api/productList'
-import FacetSidebar from '../components/FacetSidebar'
-import Pagination from '../components/Pagination'
-import ProductCard from '../components/ProductCard'
-import { FEED_ID, ORGANISATION_ID } from '../constants'
-import type { FacetResult, FeedListProduct } from '../types/ProductList'
+import { fetchProductList } from '@/api/productList'
+import CTAVideo from '@/components/CTAVideo'
+import FacetSidebar from '@/components/FacetSidebar'
+import Pagination from '@/components/Pagination'
+import ProductCard from '@/components/ProductCard'
+import { FEED_ID, ORGANISATION_ID } from '@/constants'
+import type { FacetResult, FeedListProduct } from '@/types/ProductList'
+import strollerVideo from '@/assets/William-Fortunato-Stroller.mp4'
 
 const PAGE_SIZE = 12
 const CATEGORY_FACETS = { category: ['Pushchairs & Strollers'] }
@@ -105,6 +107,15 @@ export default function PushchairsPage() {
     setSearchParams(next)
   }
 
+  function handleClearFacets() {
+    const next = new URLSearchParams(searchParams)
+    for (const key of [...next.keys()]) {
+      if (key.startsWith('f_')) next.delete(key)
+    }
+    next.delete('page')
+    setSearchParams(next)
+  }
+
   function handlePageChange(p: number) {
     const next = new URLSearchParams(searchParams)
     next.set('page', String(p))
@@ -114,35 +125,26 @@ export default function PushchairsPage() {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-blue-500 via-pink-200 to-yellow-50 py-12 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4 leading-tight">
-            Pushchairs &amp; Prams
-          </h1>
-          <p className="text-lg text-gray-500 mb-8 max-w-xl mx-auto">
-            Placeholder banner - from newborn carrycots to nimble city strollers, find the right ride for every stage.
-          </p>
-          <Link
-            to={`/search?q=${encodeURIComponent('pushchair')}`}
-            className="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-8 py-3 rounded-full transition-colors shadow-sm"
-          >
-            Shop Pushchairs
-          </Link>
-        </div>
-      </section>
+      <CTAVideo
+        video={strollerVideo}
+        heading="Pushchairs & Prams"
+        description="From newborn carrycots to nimble city strollers, find the right ride for every stage."
+        ctaText="Shop Pushchairs"
+        ctaLink={`/search?q=${encodeURIComponent('pushchair')}`}
+      />
 
       <section className="container mx-auto px-4 py-10">
         <div className="grid gap-8 md:grid-cols-3">
           {PUSHCHAIR_TYPES.map(type => (
-            <div key={type.title} className="rounded-2xl border border-pink-100 bg-white p-6 shadow-sm">
+            <div key={type.title} className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
               <img className="w-16" src="https://images.searchandmerch.com/pram-placeholder.png" />
               <h2 className="text-xl font-semibold text-gray-800 mb-2">{type.title}</h2>
               <p className="text-sm text-gray-500 mb-4 leading-relaxed">{type.description}</p>
               <Link
                 to={`/search?q=${encodeURIComponent(type.query)}`}
-                className="text-sm font-semibold text-pink-600 hover:text-pink-700"
+                className="text-sm font-semibold text-blue-600 hover:text-blue-700"
               >
-                Browse {type.title.toLowerCase()} →
+                Search {type.title.toLowerCase()} →
               </Link>
             </div>
           ))}
@@ -166,7 +168,7 @@ export default function PushchairsPage() {
         )}
 
         <div className="flex max-sm:flex-col gap-8 items-start">
-          <FacetSidebar facets={facets} selected={selectedFacets} onChange={handleFacetChange} />
+          <FacetSidebar facets={facets} selected={selectedFacets} onChange={handleFacetChange} onClear={handleClearFacets} />
 
           <div className="flex-1 w-full">
             {loading ? (

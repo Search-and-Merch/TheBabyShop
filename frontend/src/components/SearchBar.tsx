@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { fetchProductSearch } from '../api/productSearch'
-import { ORGANISATION_ID, SEARCH_ID } from '../constants'
-import type { SearchProduct } from '../types/ProductSearch'
+import { fetchProductSearch } from '@/api/productSearch'
+import { ORGANISATION_ID, SEARCH_ID } from '@/constants'
+import type { SearchProduct } from '@/types/ProductSearch'
 
 function getStringField(product: SearchProduct, ...keys: string[]): string | undefined {
   for (const key of keys) {
@@ -13,6 +13,7 @@ function getStringField(product: SearchProduct, ...keys: string[]): string | und
 export default function SearchBar() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchProduct[]>([])
+  const [searchedQuery, setSearchedQuery] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -22,6 +23,7 @@ export default function SearchBar() {
   useEffect(() => {
     if (!query.trim()) {
       setResults([])
+      setSearchedQuery(null)
       setOpen(false)
       return
     }
@@ -37,6 +39,7 @@ export default function SearchBar() {
         })
         lastSearchRef.current = { query: query.trim(), redirect: res.redirect }
         setResults(res.products.slice(0, 5))
+        setSearchedQuery(query.trim())
         setOpen(true)
       } catch {
         // silently swallow — typeahead failures shouldn't break the UI
@@ -97,11 +100,11 @@ export default function SearchBar() {
     }
   }
 
-  function handleResultClick(product: SearchProduct) {
-    const name = getStringField(product, 'name', 'title') ?? product.sku
-    setQuery(name)
+  function handleResultClick() {
+    const trimmed = query.trim()
+    setQuery('')
     setOpen(false)
-    navigate(`/search?q=${encodeURIComponent(query.trim())}`)
+    navigate(`/search?q=${encodeURIComponent(trimmed)}`)
   }
 
   return (
@@ -112,14 +115,22 @@ export default function SearchBar() {
           value={query}
           onChange={e => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => results.length > 0 && setOpen(true)}
+          onFocus={() => searchedQuery !== null && setOpen(true)}
           placeholder="Search products…"
-          className="w-56 rounded-full border border-pink-200 bg-white px-4 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all"
+          className="w-56 rounded-full border border-blue-200 bg-white px-4 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition-all"
         />
         {loading && (
-          <span className="absolute right-3 h-3.5 w-3.5 rounded-full border-2 border-pink-400 border-t-transparent animate-spin" />
+          <span className="absolute right-3 h-3.5 w-3.5 rounded-full border-2 border-blue-400 border-t-transparent animate-spin" />
         )}
       </div>
+
+      {open && searchedQuery !== null && results.length === 0 && (
+        <div className="absolute left-0 top-full mt-1 w-72 bg-white rounded-xl shadow-lg border border-gray-100 px-4 py-3 z-50">
+          <p className="text-sm text-gray-500">
+            No results for <span className="font-medium text-gray-700">“{searchedQuery}”</span>
+          </p>
+        </div>
+      )}
 
       {open && results.length > 0 && (
         <ul className="absolute left-0 top-full mt-1 w-72 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50">
@@ -132,10 +143,10 @@ export default function SearchBar() {
             return (
               <li key={product.id}>
                 <button
-                  onMouseDown={e => { e.preventDefault(); handleResultClick(product) }}
-                  className="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-pink-50 transition-colors"
+                  onMouseDown={e => { e.preventDefault(); handleResultClick() }}
+                  className="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-blue-50 transition-colors"
                 >
-                  <div className="h-10 w-10 shrink-0 rounded-lg bg-pink-100 overflow-hidden flex items-center justify-center">
+                  <div className="h-10 w-10 shrink-0 rounded-lg bg-blue-100 overflow-hidden flex items-center justify-center">
                     {imageUrl
                       ? <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
                       : <span className="text-xl">🧸</span>
@@ -144,7 +155,7 @@ export default function SearchBar() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-gray-800">{name}</p>
                     {price !== null && (
-                      <p className="text-xs text-pink-600 font-semibold">£{price.toFixed(2)}</p>
+                      <p className="text-xs text-blue-600 font-semibold">£{price.toFixed(2)}</p>
                     )}
                   </div>
                 </button>

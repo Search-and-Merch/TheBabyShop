@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+import ReviewStars from '@/components/ReviewStars'
 import type { FeedListProduct } from '@/types/ProductList'
 
 const PLACEHOLDER_COLORS = [
@@ -25,10 +27,17 @@ export default function ProductCard({ product, index = 0 }: Props) {
   const price = typeof product.price === 'number' || typeof product.price === 'string'
     ? Number(product.price)
     : null
+  const rating = typeof product.rating === 'number' || typeof product.rating === 'string'
+    ? Number(product.rating)
+    : null
   const imageUrl = getStringField(product, 'image_url', 'image', 'image_link')
+  const slug = getStringField(product, 'slug') ?? product.sku
 
   return (
-    <div className="bg-white rounded-md border border-gray-300 overflow-hidden">
+    <Link
+      to={`/product/${encodeURIComponent(slug)}`}
+      className="block bg-white rounded-md border border-gray-300 overflow-hidden hover:shadow-md transition-shadow"
+    >
       <div className={`${colorClass} flex items-center justify-center overflow-hidden`}>
         {imageUrl ? (
           <img src={imageUrl} alt={name} className="aspect-square w-full" />
@@ -39,6 +48,9 @@ export default function ProductCard({ product, index = 0 }: Props) {
       <div className="p-4">
         <p className="text-xs text-gray-400 font-mono mb-1 truncate">{product.sku}</p>
         <h3 className="font-semibold text-gray-800 text-sm leading-snug line-clamp-2">{name}</h3>
+        {rating !== null && !Number.isNaN(rating) && (
+          <ReviewStars rating={rating} size="sm" className="mt-2" />
+        )}
         <div className="mt-3 flex items-center justify-between">
           {price !== null ? (
             <span className="font-bold">£{price.toFixed(2)}</span>
@@ -50,6 +62,6 @@ export default function ProductCard({ product, index = 0 }: Props) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

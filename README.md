@@ -14,7 +14,7 @@ Example e-commerce website using Search & Merch.
 - [x] Basic Facets
 - [x] Basic Search
 - [x] Basic Recommendations
-- [ ] PDP
+- [x] PDP
 - [ ] Add To Basket
 - [ ] Checkout
 - [ ] **Integrate Search & Merch client-side tracking and conversions**

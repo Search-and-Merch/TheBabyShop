@@ -5,6 +5,7 @@ import HomePage from './pages/home/HomePage'
 import ShopPage from './pages/shop/ShopPage'
 import SearchPage from './pages/search/SearchPage'
 import PushchairsPage from './pages/pushchairs/PushchairsPage'
+import ProductPage from './pages/product/ProductPage'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/pushchairs" element={<PushchairsPage />} />
+          <Route path="/product/:slug" element={<ProductPage />} />
         </Routes>
       </main>
       <Footer />

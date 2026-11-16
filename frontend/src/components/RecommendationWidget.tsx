@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { fetchProductRecommendations } from '@/api/productRecommendations'
 import { ORGANISATION_ID, RECOMMENDATION_ID } from '@/constants'
@@ -16,10 +17,14 @@ function RecommendedProductCard({ product, index }: { product: ScoredProduct; in
   const colorClass = PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length]
   const name = getStringField(product, 'name', 'title') ?? product.sku
   const imageUrl = getStringField(product, 'image_url', 'image', 'image_link')
+  const slug = getStringField(product, 'slug') ?? product.sku
 
   return (
-    <div className="bg-white rounded-lg pt-4 border border-gray-300 overflow-hidden min-w-[180px] max-w-[180px] shrink-0">
-      <div className={`${colorClass} h-36 flex items-center justify-center overflow-hidden`}>
+    <Link
+      to={`/product/${encodeURIComponent(slug)}`}
+      className="block bg-white rounded-lg shadow-lg overflow-hidden min-w-[180px] max-w-[180px] shrink-0"
+    >
+      <div className={`${colorClass} h-43 flex items-center justify-center overflow-hidden`}>
         {imageUrl ? (
           <img src={imageUrl} alt={name} className="aspect-square w-full" />
         ) : (
@@ -30,10 +35,10 @@ function RecommendedProductCard({ product, index }: { product: ScoredProduct; in
         <p className="text-xs text-gray-400 font-mono mb-0.5 truncate">{product.sku}</p>
         <h4 className="text-xs font-semibold text-gray-800 leading-snug line-clamp-2">{name}</h4>
         {product.price != null && (
-          <p className="text-xs font-semibold text-gray-900 mt-1">£{product.price.toFixed(2)}</p>
+          <p className="text-base font-bold text-cyan-800 mt-1">£{product.price.toFixed(2)}</p>
         )}
       </div>
-    </div>
+    </Link>
   )
 }
 

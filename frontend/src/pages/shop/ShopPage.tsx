@@ -5,6 +5,7 @@ import FacetSidebar from '@/components/FacetSidebar'
 import Pagination from '@/components/Pagination'
 import ProductCard from '@/components/ProductCard'
 import { FEED_ID, ORGANISATION_ID } from '@/constants'
+import { track } from '@/tracking'
 import type { FacetResult, FeedListProduct } from '@/types/ProductList'
 
 const PAGE_SIZE = 12
@@ -57,6 +58,14 @@ export default function ShopPage() {
         setFacets(res.facets)
         setTotalPages(res.total_pages)
         setFilteredCount(res.filtered_count)
+        track('view_lister', {
+          lister: 'shop',
+          feed_id: res.feed_id,
+          page: res.page,
+          facets: selectedFacets,
+          filtered_count: res.filtered_count,
+          product_ids: res.products.map((p) => p.id),
+        })
       })
       .catch((e: Error) => {
         if (!cancelled) setError(e.message)

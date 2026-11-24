@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { ApiError, fetchProductDetail } from '@/api/productDetail'
+import AddToBasketButton from '@/components/AddToBasketButton'
 import RecommendationWidget from '@/components/RecommendationWidget'
 import ReviewStars from '@/components/ReviewStars'
 import { FEED_ID } from '@/constants'
+import { track } from '@/tracking'
 import type { ProductDetailProduct } from '@/types/ProductDetail'
 
 function getStringField(product: ProductDetailProduct, ...keys: string[]): string | undefined {
@@ -81,6 +83,14 @@ function ProductDetails({ product }: { product: ProductDetailProduct }) {
         {description && (
           <p className="mt-6 text-gray-600 leading-relaxed">{description}</p>
         )}
+
+        <AddToBasketButton
+          sku={product.sku}
+          productId={product.id}
+          price={price}
+          disabled={inStock === false}
+          className="mt-8"
+        />
       </div>
     </div>
   )
@@ -108,7 +118,14 @@ export default function ProductPage() {
 
     fetchProductDetail(FEED_ID, slug)
       .then((res) => {
-        if (!cancelled) setProduct(res.product)
+        if (cancelled) return
+        setProduct(res.product)
+        console.log('view product call');
+        track('view_product', {
+          feed_id: res.feed_id,
+          product_id: res.product.id,
+          sku: res.product.sku,
+        })
       })
       .catch((e: Error) => {
         if (cancelled) return

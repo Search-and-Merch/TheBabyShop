@@ -38,6 +38,8 @@ jobs:
           VITE_FEED_ID : ${{ secrets.VITE_FEED_ID }}
           VITE_SEARCH_ID: ${{ secrets.VITE_SEARCH_ID }}
           VITE_RECOMMENDATION_ID : ${{ secrets.VITE_RECOMMENDATION_ID }}
+          VITE_TRACKING_ID: ${{ secrets.VITE_TRACKING_ID }}
+          VITE_TRACKING_URL: ${{ secrets.VITE_TRACKING_URL }}
         run: bun run build
 
       - name: Configure AWS credentials (dev)
